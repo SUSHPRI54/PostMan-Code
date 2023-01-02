@@ -1,0 +1,638 @@
+{
+	"info": {
+		"_postman_id": "1d88fa66-0f62-402a-9f95-c069520ef71f",
+		"name": "SMS API Testing",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "4903344"
+	},
+	"item": [
+		{
+			"name": "TC001_Add_New_Student",
+			"item": [
+				{
+					"name": "Add_New_Student",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Validate Post Status Code\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Validate Status Code String\", function () {\r",
+									"    var data = pm.environment.get(\"RESULT_STRING\");\r",
+									"    pm.response.to.have.status(data)\r",
+									"});\r",
+									"\r",
+									"\r",
+									"var jsonData = pm.response.json();\r",
+									"var StudentID = jsonData.id\r",
+									" \r",
+									"pm.environment.set(\"StudentID\", StudentID);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": 1,\r\n  \"first_name\": \"{{APPLICATION_USERNAME}}\",\r\n  \"middle_name\": \"Gop\",\r\n  \"last_name\": \"{{APPLICATION_PASSWORD}}\",\r\n  \"date_of_birth\": \"04/06/1992\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_BASE_URL}}api/studentsDetails",
+							"host": [
+								"{{API_BASE_URL}}api"
+							],
+							"path": [
+								"studentsDetails"
+							]
+						},
+						"description": "POST request for add student"
+					},
+					"response": []
+				},
+				{
+					"name": "GET Fetch_And_Validate_Details",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(500);\r",
+									"});\r",
+									"pm.test(\"Validate Post Status Code\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Status code name has string\", function () {\r",
+									"    pm.response.to.have.status(\"OK\");\r",
+									"});\r",
+									"pm.test(\"Content-Type is present\", function () {\r",
+									"    pm.response.to.have.header(\"Content-Type\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Validate Header Value - Server\", function () {\r",
+									"    pm.expect(pm.response.headers.get(\"Server\")).to.eql(\"Microsoft-IIS/8.5\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Validate Last Name\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.data.last_name).to.eql(\"pass\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API_BASE_URL}}api/studentsDetails/{{StudentID}}",
+							"host": [
+								"{{API_BASE_URL}}api"
+							],
+							"path": [
+								"studentsDetails",
+								"{{StudentID}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "TC002_Add_Update_Student",
+			"item": [
+				{
+					"name": "Add_New_Student",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Validate Post Status Code\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+									"});\r",
+									"pm.test(\"Check Student ID\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.first_name).to.eql(\"Sush\");\r",
+									"});\r",
+									"\r",
+									"var jsonData = pm.response.json();\r",
+									"var StudentID = jsonData.id\r",
+									" \r",
+									"pm.environment.set(\"StudentID\", StudentID);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": 1,\r\n  \"first_name\": \"Sush\",\r\n  \"middle_name\": \"Gop\",\r\n  \"last_name\": \"Pawar\",\r\n  \"date_of_birth\": \"04/06/1992\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_BASE_URL}}api/studentsDetails",
+							"host": [
+								"{{API_BASE_URL}}api"
+							],
+							"path": [
+								"studentsDetails"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update_Student_Data",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(500);\r",
+									"});\r",
+									"pm.test(\"Validate response content - update  data success\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"update  data success\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": {{StudentID}},\r\n  \"first_name\": \"Sush\",\r\n  \"middle_name\": \"ABCD\",\r\n  \"last_name\": \"Pawar\",\r\n  \"date_of_birth\": \"04/06/2000\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_BASE_URL}}api/studentsDetails/{{StudentID}}",
+							"host": [
+								"{{API_BASE_URL}}api"
+							],
+							"path": [
+								"studentsDetails",
+								"{{StudentID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Validate_After_Update",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(500);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Validate Post Status Code\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Status code name has string\", function () {\r",
+									"    pm.response.to.have.status(\"OK\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API_BASE_URL}}api/studentsDetails/{{StudentID}}",
+							"host": [
+								"{{API_BASE_URL}}api"
+							],
+							"path": [
+								"studentsDetails",
+								"{{StudentID}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "TC003_Add_Delete_Student",
+			"item": [
+				{
+					"name": "Add_New_Student",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Validate Post Status Code\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(500);\r",
+									"});\r",
+									"\r",
+									"var jsonData = pm.response.json();\r",
+									"var StudentID = jsonData.id\r",
+									" \r",
+									"pm.environment.set(\"StudentID\", StudentID);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": 1,\r\n  \"first_name\": \"Sush\",\r\n  \"middle_name\": \"Gop\",\r\n  \"last_name\": \"Pawar\",\r\n  \"date_of_birth\": \"04/06/1992\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_BASE_URL}}api/studentsDetails",
+							"host": [
+								"{{API_BASE_URL}}api"
+							],
+							"path": [
+								"studentsDetails"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete_Student",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Validate Delete Status Code\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(500);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Validate response content\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"Delete  data success\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{API_BASE_URL}}api/studentsDetails/{{StudentID}}",
+							"host": [
+								"{{API_BASE_URL}}api"
+							],
+							"path": [
+								"studentsDetails",
+								"{{StudentID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET Validate_After_Delete",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});\r",
+									"pm.test(\"Validate Post Status Code\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Status code name has string\", function () {\r",
+									"    pm.response.to.have.status(\"OK\");\r",
+									"});\r",
+									"pm.test(\"Content-Type is present\", function () {\r",
+									"    pm.response.to.have.header(\"Content-Type\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Validate Header Value - Server\", function () {\r",
+									"    pm.expect(pm.response.headers.get(\"Server\")).to.eql(\"Microsoft-IIS/8.5\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Validate Last Name\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.data.last_name).to.eql(\"Pawa\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API_BASE_URL}}api/studentsDetails/{{StudentID}}",
+							"host": [
+								"{{API_BASE_URL}}api"
+							],
+							"path": [
+								"studentsDetails",
+								"{{StudentID}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "TC001_Add_New_Student _JS",
+			"item": [
+				{
+					"name": "Add_New_Student",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"console.log(\"************* THis is JS Code *************\")\r",
+									"//console.log(request.data)\r",
+									"//console.log(request.url)\r",
+									"//console.log(request.method)\r",
+									"\r",
+									"json1=JSON.parse(responseBody)\r",
+									"//console.log(json1.id)\r",
+									"//console.log(responseTime)\r",
+									"//console.log(responseCode.code)\r",
+									"\r",
+									"Student=json1.id\r",
+									"postman.setEnvironmentVariable(\"Student\",Student)"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"//console.log(\"************* Start Creating Request *************\")\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": 1,\r\n  \"first_name\": \"Sushant\",\r\n  \"middle_name\": \"Gop\",\r\n  \"last_name\": \"{{APPLICATION_PASSWORD}}\",\r\n  \"date_of_birth\": \"04/06/1992\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_BASE_URL}}api/studentsDetails",
+							"host": [
+								"{{API_BASE_URL}}api"
+							],
+							"path": [
+								"studentsDetails"
+							]
+						},
+						"description": "POST request for add student"
+					},
+					"response": []
+				},
+				{
+					"name": "GET Fetch_And_Validate_Details",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(500);\r",
+									"});\r",
+									"pm.test(\"Validate Post Status Code\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Status code name has string\", function () {\r",
+									"    pm.response.to.have.status(\"OK\");\r",
+									"});\r",
+									"pm.test(\"Content-Type is present\", function () {\r",
+									"    pm.response.to.have.header(\"Content-Type\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									"\r",
+									"pm.test(\"Validate Last Name\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.data.last_name).to.eql(\"pass\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API_BASE_URL}}api/studentsDetails/{{Student}}",
+							"host": [
+								"{{API_BASE_URL}}api"
+							],
+							"path": [
+								"studentsDetails",
+								"{{Student}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "GitHub API",
+			"item": [
+				{
+					"name": "User Auth",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "SUSHPRI54",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "Sush@9654@git",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://api.github.com/user",
+							"protocol": "https",
+							"host": [
+								"api",
+								"github",
+								"com"
+							],
+							"path": [
+								"user"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "JIRA API",
+			"item": [
+				{
+					"name": "Add User",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "Sush@9654",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "sushant.gpawar@gmail.com",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"charlie\",\r\n    \"password\": \"abracadabra\",\r\n    \"emailAddress\": \"charlie@atlassian.com\",\r\n    \"displayName\": \"Charlie of Atlassian\",\r\n    \"applicationKeys\": [\r\n        \"jira-core\"\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://team-16715365416667.atlassian.net/rest/api/2/user",
+							"protocol": "https",
+							"host": [
+								"team-16715365416667",
+								"atlassian",
+								"net"
+							],
+							"path": [
+								"rest",
+								"api",
+								"2",
+								"user"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "https://developer.atlassian.com/cloud/confluence/deprecation-notice-basic-auth/",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		}
+	]
+}
